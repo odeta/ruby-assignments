@@ -1,5 +1,5 @@
 require './player'
-
+require './colorize.rb'
 class Game
   attr_reader :board, :player1, :player2
 
@@ -24,17 +24,17 @@ class Game
     def display_board
       puts
       @board.map do |pos, symb|
-        print pos % 3 == 0 ? "#{symb}\n" : symb.to_s + " "
+        print pos % 3 == 0 ? "#{symb}\n".magenta : "#{symb.to_s} ".magenta
       end.join(" ")
       puts
     end
 
     def display_rules
-      puts "Hi, to play this game you should"
-      puts "enter one integer, which must be"
-      puts "between 1 and 9, like in this"
-      puts "example: 1."
-      puts "************************************"
+      puts "
+Hi, to play this game you should
+enter one integer, which must be
+between 1 and 9, like in this
+************************************".magenta
     end
 
     def put_symbol(pos, symbol)
@@ -44,9 +44,9 @@ class Game
     end
 
     def set_up_players
-      puts "First player name:"
+      puts "First player name:".cyan.bold
       @player1.name = gets.chomp
-      puts "...and symbol (enter 1 for 'X', 2 for 'O'):"
+      puts "...and symbol (enter 1 for 'X', 2 for 'O'):".cyan
       @player1.symbol =
         case gets.match(/\d+/)[0].to_i
         when 1 then 'X'
@@ -54,7 +54,7 @@ class Game
         else ''
         end
       while @player1.symbol == ''
-        puts "Try again (enter 1 for 'X', 2 for 'O'):"
+        puts "Try again (enter 1 for 'X', 2 for 'O'):".cyan
         @player1.symbol =
           case gets.match(/\d+/)[0].to_i
           when 1 then 'X'
@@ -62,20 +62,20 @@ class Game
           else ''
           end
       end
-      puts "\n#{@player1.name} is #{@player1.symbol}s.\n"
-      puts "Second player name:"
+      puts "\n#{@player1.name} is #{@player1.symbol}s.\n".cyan
+      puts "Second player name:".cyan.bold
       @player2.name = gets.chomp
       @player2.symbol = @player1.symbol == 'X' ? 'O' : 'X'
-      puts "\n#{@player2.name} is #{@player2.symbol}s.\n"
+      puts "\n#{@player2.name} is #{@player2.symbol}s.\n".cyan
     end
 
     def play_a_turn(player)
       display_board
-      puts "#{player.name}'s turn."
-      puts "Enter a position:"
+      puts "#{player.name}'s turn.".cyan.bold
+      puts "Enter a position:".magenta
       num = gets.match(/\d+/)[0].to_i
       until put_symbol(num, player.symbol)
-        puts "Already taken, try again:"
+        puts "Already taken, try again:".magenta
         num = gets.match(/\d+/)[0].to_i
       end
     end
@@ -88,7 +88,7 @@ class Game
       winning_arr.each do |arr|
         if arr & player_arr == arr
           display_board
-          puts "#{player.name} won!"
+          puts "#{player.name} won!".magenta.bold
           return true
         end
       end
